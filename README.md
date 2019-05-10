@@ -28,7 +28,7 @@ fixed4 frag (v2f i) : SV_Target
     DbgSetColor(root, float4(1, i.localPosition.x, 0, 1));
     DbgVectorO3(root, i.localPosition.xyz);     /* a 3D vector in object coordinates */
 
-    DbgChangePosByO3(root, i.localPosition.xyz);  /* move at the other end of that 3D vector */
+    DbgChangePosByO3(root, i.localPosition.xyz);  /* move to the other end of that 3D vector */
     DbgValue1(root, red);                         /* draw a label with one float value */
     /* End of debug code */
 
