@@ -56,4 +56,10 @@ writes one float numerically on screen, at the position that was just changed in
 You should remember to remove or comment out all the code from the shader---including the
 ``#include "debugger.cginc"``--- when you are done.
 
+If the shader is more complicated, just make sure you call ``DebugFrament()`` once, typically at
+the start of the fragement function, and then pass around the ``root`` variable to all places where
+you need ``DbgXxx()``.  Feel free to add conditions, like ``if (x < 0) DbgSetColor(root, float4(1,0,0,1));``
+to make the next thing red if ``x < 0``.  You're writing a shader, but in this case you don't have
+to worry about performance :-)
+
 Have fun!
