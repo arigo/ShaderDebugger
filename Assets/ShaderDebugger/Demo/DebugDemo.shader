@@ -14,7 +14,7 @@
 			#pragma vertex vert
 			#pragma fragment frag
             #pragma target 5.0
-            #include "debugger.cginc"
+            #include "../debugger.cginc"
 
 			struct appdata
 			{

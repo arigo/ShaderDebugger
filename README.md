@@ -1,7 +1,7 @@
 # ShaderDebugger
 Simple Unity framework to debug shader code.  Right now, supports only pixel shaders.  Here's an example:
 
-![sshot1](Demo/Screenshots/sshot1.png?raw=true "sshot1")
+![sshot1](Screenshots/sshot1.png?raw=true "sshot1")
 
 We have a custom shader rendering the red ball, and the goal is to debug it.  We add a
 few lines to it (see below) and then choose "Window", "Shader Debugger" in the Unity menus.
@@ -15,7 +15,7 @@ numerical value.  This is done by writing the following code in the pixel shader
 example comes from the ``Demo`` directory):
 
 ```c
-#include "debugger.cginc"
+#include "../../ShaderDebugger/debugger.cginc"     /* relative path to that file */
 
 fixed4 frag (v2f i) : SV_Target
 {
@@ -34,6 +34,8 @@ fixed4 frag (v2f i) : SV_Target
 }
 ENDCG
 ```
+
+Note that this only works in the Scene view, not in the Game view (nor in builds).
 
 In general, we must call ``uint root = DebugFragment(i.vertex);`` once, and then any number of
 ``DbgXxx()`` functions by passing the ``root`` value as first argument.  The whole list
