@@ -1,0 +1,23 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel InternalDebugBufferCap
+
+
+struct _DebugStruct
+{
+    uint root;
+    uint kind;
+    float4 v;
+};
+
+RWStructuredBuffer<_DebugStruct> _internal_debug_buffer;
+
+
+[numthreads(1,1,1)]
+void InternalDebugBufferCap(uint3 id : SV_DispatchThreadID)
+{
+    _DebugStruct s;
+    s.root = _internal_debug_buffer.IncrementCounter();
+    s.kind = 0;
+    s.v = float4(0, 0, 0, 0);
+    _internal_debug_buffer[0] = s;
+}
