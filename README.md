@@ -17,6 +17,8 @@ example comes from the ``Demo`` directory):
 ```c
 #include "../../ShaderDebugger/debugger.cginc"     /* relative path to that file */
 
+...
+
 fixed4 frag (v2f i) : SV_Target
 {
     float red = i.localPosition.x;
@@ -32,7 +34,8 @@ fixed4 frag (v2f i) : SV_Target
     
     return fixed4(red, 0, 0, 1);
 }
-ENDCG
+
+...
 ```
 
 Note that this only works in the Scene view, not in the Game view (nor in builds).
