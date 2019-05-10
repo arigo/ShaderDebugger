@@ -285,11 +285,8 @@ namespace ShaderDebugger
             pt *= -sv_pos.w / pt.z;
             pt = mat_cam2world.MultiplyPoint(pt);
             Vector3 original_pt = pt;
-            //Debug.Log(sv_pos + " => " + pt.x + ", " + pt.y + ", " + pt.z);
 
-            //Vector3 center = (Vector3)pt / pt.w;
             Handles.color = Color.yellow;
-            //Handles.DrawWireCube(pt, new Vector3(0.01f, 0.01f, 0.01f));
 
             const float SCREEN_FACTOR = 0.03f;
             Vector3 camforward = mat_cam2world.MultiplyVector(Vector3.forward);
