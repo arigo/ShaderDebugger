@@ -53,7 +53,7 @@ a "current" position and color which affect what you draw next; you can change i
 ``DbgChangePosXxx()`` and ``DbgSetColor()``.  In the example above, the final ``DbgValue1()``
 writes one float numerically on screen, at the position that was just changed in the previous line.
 
-You should remember to remove or comment out all the code---including the
+You should remember to remove or comment out all the code from the shader---including the
 ``#include "debugger.cginc"``--- when you are done.
 
 Have fun!
