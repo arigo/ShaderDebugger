@@ -15,6 +15,7 @@ numerical value.  This is done by writing the following code in the pixel shader
 example comes from the ``Demo`` directory):
 
 ```c
+#pragma target 4.5                                 /* needs at least 4.5 */
 #include "../../ShaderDebugger/debugger.cginc"     /* relative path to that file */
 
 ...
