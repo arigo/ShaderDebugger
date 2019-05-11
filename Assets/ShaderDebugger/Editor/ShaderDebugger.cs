@@ -253,7 +253,7 @@ namespace ShaderDebugger
             stack.Clear();
             textlines.Clear();
 
-            if (display_roots != null)
+            if (display_roots != null && debug_array != null)
                 for (int i = 0; i < display_roots.Length; i++)
                     DisplayHandle(display_roots[i]);
         }
