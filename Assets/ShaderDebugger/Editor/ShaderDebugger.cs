@@ -355,7 +355,7 @@ namespace ShaderDebugger
         {
             if (textlines.Count > 0)
             {
-                Handles.Label(pt, string.Join("\n", textlines));
+                Handles.Label(pt, string.Join("\n", textlines.ToArray()));
                 textlines.Clear();
             }
         }
