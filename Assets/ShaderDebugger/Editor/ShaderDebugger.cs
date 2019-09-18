@@ -60,8 +60,7 @@ namespace ShaderDebugger
                 int rec_entries = buffer == null ? -1 : 0;
                 if (buffer != null && buffer.count > 0)
                 {
-                    buffer.GetData(debug_array, 0, 0, 1);
-                    rec_entries = (int)debug_array[0].next;
+                    rec_entries = GetBufferLength();
                 }
                 EditorGUILayout.LabelField("Recorded entries", rec_entries >= 0 ? rec_entries.ToString() : "Loading...");
                 if (rec_entries > buffer_length)
@@ -101,6 +100,7 @@ namespace ShaderDebugger
         bool freeze_view = false;
 
         ComputeBuffer buffer;
+        int buffer_length_cache;
         DebugStruct[] debug_array;
         int current_buffer_length;
         Matrix4x4 buf_projmat, buf_world2camera;
@@ -120,14 +120,12 @@ namespace ShaderDebugger
         {
             OnDisable();
             Camera.onPreRender += PreRenderCallback;
-            Camera.onPostRender += PostRenderCallback;
             SceneView.onSceneGUIDelegate += SceneGUICallback;
         }
 
         void OnDisable()
         {
             Camera.onPreRender -= PreRenderCallback;
-            Camera.onPostRender -= PostRenderCallback;
             SceneView.onSceneGUIDelegate -= SceneGUICallback;
             CloseBuffer();
         }
@@ -156,25 +154,11 @@ namespace ShaderDebugger
             Graphics.ClearRandomWriteTargets();
             Graphics.SetRandomWriteTarget(7, buffer, false);
             buffer.SetCounterValue(0);
+            buffer_length_cache = 0;
 
             buf_projmat = cam.projectionMatrix;
             buf_world2camera = cam.worldToCameraMatrix;
             buf_scale = new Vector3(cam.scaledPixelWidth, cam.scaledPixelHeight, 1);
-        }
-
-        void PostRenderCallback(Camera cam)
-        {
-            if (cam == null || cam.cameraType != CameraType.SceneView)
-                return;
-
-            if (buffer != null)
-            {
-                /* a bit messy, this is just to know the final value of the counter in 'buffer' */
-                var path = AssetDatabase.GUIDToAssetPath("64997cb862c601246b82aced336da5c8");
-                var cs = AssetDatabase.LoadAssetAtPath<ComputeShader>(path);
-                cs.SetBuffer(0, "_internal_debug_buffer", buffer);
-                cs.Dispatch(0, 1, 1, 1);
-            }
         }
 
 
@@ -212,6 +196,22 @@ namespace ShaderDebugger
         Stack<uint> stack = new Stack<uint>();
         List<string> textlines = new List<string>();
 
+        int GetBufferLength()
+        {
+            if (buffer_length_cache == 0)
+            {
+                /* a bit messy, this is just to know the final value of the counter in 'buffer' */
+                var path = AssetDatabase.GUIDToAssetPath("64997cb862c601246b82aced336da5c8");
+                var cs = AssetDatabase.LoadAssetAtPath<ComputeShader>(path);
+                cs.SetBuffer(0, "_internal_debug_buffer", buffer);
+                cs.Dispatch(0, 1, 1, 1);
+
+                buffer.GetData(debug_array, 0, 0, 1);
+                buffer_length_cache = (int)debug_array[0].next;
+            }
+            return buffer_length_cache;
+        }
+
         void SceneGUICallback(SceneView scene_view)
         {
             if (Event.current.type != EventType.Repaint)
@@ -220,11 +220,10 @@ namespace ShaderDebugger
             if (!freeze_view && (Time.unscaledTime != most_recent_load || display_roots == null ||
                                  display_roots.Length != display_count))
             {
-                if (buffer == null)
+                if (buffer == null || buffer.count == 0)
                     return;
 
-                buffer.GetData(debug_array, 0, 0, 1);
-                most_recent_count = (int)debug_array[0].next;
+                most_recent_count = GetBufferLength();
                 if (most_recent_count > debug_array.Length)
                     most_recent_count = debug_array.Length;
                 buffer.GetData(debug_array, 0, 0, most_recent_count);
