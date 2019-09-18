@@ -41,6 +41,9 @@ fixed4 frag (v2f i) : SV_Target
 
 Note that this only works in the Scene view, not in the Game view (nor in builds).
 
+NEW (sept. 2019): it also works with post-processing or image effect shaders.  See the demos
+in the directories "Demo" and "Demo PostProcessing".
+
 In general, we must call ``uint root = DebugFragment(i.vertex);`` once, and then any number of
 ``DbgXxx()`` functions by passing the ``root`` value as first argument.  The whole list
 of supported functions is in ``debugger.cginc``.  (If you need to add more, you need to edit
