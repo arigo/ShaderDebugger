@@ -19,7 +19,7 @@
             #pragma vertex vert_img
             #pragma fragment frag
             #pragma target 5.0
-            #include "../debugger.cginc"
+            #include "Assets/ShaderDebugger/debugger.cginc"
  
             #include "UnityCG.cginc"
  

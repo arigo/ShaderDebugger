@@ -16,7 +16,7 @@ example comes from the ``Demo`` directory):
 
 ```c
 #pragma target 4.5                                 /* needs at least 4.5 */
-#include "../../ShaderDebugger/debugger.cginc"     /* relative path to that file */
+#include "Assets/ShaderDebugger/debugger.cginc"    /* could also be a relative path */
 
 ...
 
