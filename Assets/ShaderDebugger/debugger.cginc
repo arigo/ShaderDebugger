@@ -53,18 +53,15 @@ uint _DbgEmitStart(float4 v)
 }
 
 
-uint DebugVertexW3(float3 world_position) { return _DbgEmitStart(float4(world_position, 0)); }
-uint DebugVertexW4(float4 world_position) { return DebugVertexW3(world_position.xyz / world_position.w); }
-uint DebugVertexO4(float4 obj_position) { return DebugVertexW3(mul(unity_ObjectToWorld, obj_position).xyz); }
+uint DebugVertexW4(float4 world_position) { return _DbgEmitStart(float4(world_position.xyz / world_position.w, 0)); }
+uint DebugVertexO4(float4 obj_position) { return DebugVertexW4(mul(unity_ObjectToWorld, obj_position)); }
 uint DebugFragment(float4 sv_position) { return _DbgEmitStart(sv_position); }
 
 void DbgSetColor(uint root, float4 color) { _DbgEmit(root, _DEBUG_SET_COLOR, color); }
 
 void DbgChangePosToO4(uint root, float4 obj_position) { float4 wp = mul(unity_ObjectToWorld, obj_position); _DbgEmit(root, _DEBUG_SET_POS, float4(wp.xyz / wp.w, 55)); }
-void DbgChangePosToO3(uint root, float3 obj_position) { DbgChangePosToO4(root, float4(obj_position, 1)); }
 void DbgChangePosByO3(uint root, float3 obj_vector) { _DbgEmit(root, _DEBUG_CHANGE_POS, float4(mul((float3x3)unity_ObjectToWorld, obj_vector), 55)); }
-void DbgChangePosToW3(uint root, float3 world_position) { _DbgEmit(root, _DEBUG_SET_POS, float4(world_position, 66)); }
-void DbgChangePosToW4(uint root, float4 world_position) { DbgChangePosToW3(root, world_position.xyz / world_position.w); }
+void DbgChangePosToW4(uint root, float4 world_position) { _DbgEmit(root, _DEBUG_SET_POS, float4(world_position.xyz / world_position.w, 66)); }
 void DbgChangePosByW3(uint root, float3 world_vector) { _DbgEmit(root, _DEBUG_CHANGE_POS, float4(world_vector, 66)); }
 void DbgResetPos(uint root) { _DbgEmit(root, _DEBUG_RESET_POS, float4(0, 0, 0, 0)); }
 //void DbgMoveC4(uint root, float4 clip_position) { _DbgEmit(root, _DEBUG_SET_POS, float4(clip_position.xyz / clip_position.w, 77)); }

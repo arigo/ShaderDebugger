@@ -1,9 +1,9 @@
 # ShaderDebugger
-Simple Unity framework to debug shader code.  Right now, supports only pixel shaders.  Here's an example:
+Simple Unity framework to debug shader code.  Supports vertex and fragment shaders.  Here's an example:
 
 ![sshot1](Screenshots/sshot1.png?raw=true "sshot1")
 
-We have a custom shader rendering the red ball, and the goal is to debug it.  We add a
+We have a custom fragment shader rendering the red ball, and the goal is to debug it.  We add a
 few lines to it (see below) and then choose "Window", "Shader Debugger" in the Unity menus.
 A small number of pixels that use this shader are automatically sampled and displayed as
 yellow dots.  For each yellow dot, the extra information that we chose to record from the
@@ -41,10 +41,18 @@ fixed4 frag (v2f i) : SV_Target
 
 Note that this only works in the Scene view, not in the Game view (nor in builds).
 
+NEW (oct. 2019): it also supports vertex shaders.  See the demo in the directory "Demo Vertex".
+The main difference is that you need to call ``DebugVertexO4()`` and not ``DebugFragment()``.
+
 NEW (sept. 2019): it also works with post-processing or image effect shaders.  See the demos
 in the directories "Demo" and "Demo PostProcessing".
 
-In general, we must call ``uint root = DebugFragment(i.vertex);`` once, and then any number of
+
+## Details
+
+In general, we must call ``uint root = DebugFragment(i.vertex);`` once in a fragment or
+post-processing shader, or ``uint root = DebugVertexO4(i.vertex);`` once in a vertex shader.
+Then we can call any number of
 ``DbgXxx()`` functions by passing the ``root`` value as first argument.  The whole list
 of supported functions is in ``debugger.cginc``.  (If you need to add more, you need to edit
 that place as well as ``DisplayHandle()`` in ``ShaderDebugger.cs``.  Please issue pull requests
