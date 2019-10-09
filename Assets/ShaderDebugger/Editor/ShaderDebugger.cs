@@ -60,7 +60,7 @@ namespace ShaderDebugger
                 int rec_entries = buffer == null ? -1 : 0;
                 if (buffer != null && buffer.count > 0)
                 {
-                    rec_entries = GetBufferLength();
+                    rec_entries = GetBufferLength() - 1;
                 }
                 EditorGUILayout.LabelField("Recorded entries", rec_entries >= 0 ? rec_entries.ToString() : "Loading...");
                 if (rec_entries > buffer_length)
@@ -69,7 +69,8 @@ namespace ShaderDebugger
                 if (rec_entries == 0)
                 {
                     EditorGUILayout.HelpBox("No shader including 'debugging.cginc' found, or object is not drawn." +
-                        "\n\nTo debug a shader, you must first call DebugFrament() inside the fragment shader and then call the " +
+                        "\n\nTo debug a shader, you must first call DebugFragment() inside the fragment shader " +
+                        "or e.g. DebugVertexO4() in the vertex shader, and then call the " +
                         "DbgXxx() functions to record what you are interested in seeing.", MessageType.Warning);
                 }
             }
@@ -207,7 +208,7 @@ namespace ShaderDebugger
                 cs.Dispatch(0, 1, 1, 1);
 
                 buffer.GetData(debug_array, 0, 0, 1);
-                buffer_length_cache = (int)debug_array[0].next;
+                buffer_length_cache = (int)debug_array[0].next + 1;
             }
             return buffer_length_cache;
         }
@@ -236,13 +237,35 @@ namespace ShaderDebugger
                 display_roots = new uint[display_count];
                 if (most_recent_count > 1)
                 {
-                    for (int i = 0; i < display_count; i++)
+                    /* first try to see if there are <= display_count entries in total */
+                    int total = 0;
+                    for (uint j = 1; j < most_recent_count; j++)
+                        if (debug_array[j].kind == _DEBUG_ROOT)
+                        {
+                            total++;
+                            if (total > display_count)
+                                break;
+                        }
+
+                    if (total > display_count)
                     {
-                        uint j = (uint)Random.Range(1, most_recent_count);
-                        while (debug_array[j].next < j)
-                            j = debug_array[j].next;
-                        Debug.Assert(debug_array[j].kind == _DEBUG_ROOT);
-                        display_roots[i] = j;
+                        /* too many entries: sample randomly */
+                        for (int i = 0; i < display_count; i++)
+                        {
+                            uint j = (uint)Random.Range(1, most_recent_count);
+                            while (debug_array[j].next < j)
+                                j = debug_array[j].next;
+                            Debug.Assert(debug_array[j].kind == _DEBUG_ROOT);
+                            display_roots[i] = j;
+                        }
+                    }
+                    else
+                    {
+                        /* not too many entries: pick them all */
+                        total = 0;
+                        for (uint j = 1; j < most_recent_count; j++)
+                            if (debug_array[j].kind == _DEBUG_ROOT)
+                                display_roots[total++] = j;
                     }
                 }
                 most_recent_load = Time.unscaledTime;
@@ -278,11 +301,23 @@ namespace ShaderDebugger
 
             /* The SV_POSITION that we record from the fragment shader is in screen space.
              * It is not in clip space, even though that's how the vertex shader writes it.
+             * In vertex shaders, getting the same screen space is messy, so instead we
+             * write the world-space coordinate with a marker w=0.
              */
             Vector4 sv_pos = debug_array[j_root].v;
-            Vector3 pt = mat_screen2cam.MultiplyPoint((Vector3)sv_pos);
-            pt *= -sv_pos.w / pt.z;
-            pt = mat_cam2world.MultiplyPoint(pt);
+            Vector3 pt;
+            if (sv_pos.w != 0)
+            {
+                /* fragment shader */
+                pt = mat_screen2cam.MultiplyPoint((Vector3)sv_pos);
+                pt *= -sv_pos.w / pt.z;
+                pt = mat_cam2world.MultiplyPoint(pt);
+            }
+            else
+            {
+                /* vertex shader */
+                pt = (Vector3)sv_pos;
+            }
             Vector3 original_pt = pt;
 
             Handles.color = Color.yellow;

@@ -1,4 +1,4 @@
-﻿Shader "Unlit/BlackAndWhite"
+﻿Shader "Custom/BlackAndWhite"
 {
     Properties
     {

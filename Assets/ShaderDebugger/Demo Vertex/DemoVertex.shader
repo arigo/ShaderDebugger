@@ -1,4 +1,4 @@
-﻿Shader "Custom/DebugDemo"
+﻿Shader "Custom/DemoVertex"
 {
 	Properties
 	{
@@ -19,6 +19,7 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
+                float3 normal : NORMAL;
 			};
 
 			struct v2f
@@ -30,23 +31,19 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+                uint root = DebugVertexO4(v.vertex);
+                DbgSetColor(root, float4(1, v.vertex.x, 0, 1));
+                DbgVectorO3(root, v.normal * 0.25);
+
+                o.vertex = UnityObjectToClipPos(v.vertex);
                 o.localPosition = v.vertex;
 				return o;
 			}
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-                float red = i.localPosition.x;
-            
-                uint root = DebugFragment(i.vertex);
-                DbgSetColor(root, float4(1, i.localPosition.x, 0, 1));
-                DbgVectorO3(root, i.localPosition.xyz);
-                
-                DbgChangePosByO3(root, i.localPosition.xyz);
-                DbgValue1(root, i.localPosition.x);
-
-                return fixed4(red, 0, 0, 1);
+                float green = i.localPosition.x;
+                return fixed4(0, green, 0, 1);
 			}
 			ENDCG
 		}
