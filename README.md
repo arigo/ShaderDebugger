@@ -1,5 +1,5 @@
 # ShaderDebugger
-Simple Unity framework to debug shader code.  Supports vertex and fragment shaders.  Here's an example:
+Simple Unity framework to debug shader code.  Supports vertex, fragment and postprocessing shaders.  Here's an example:
 
 ![sshot1](Screenshots/sshot1.png?raw=true "sshot1")
 
