@@ -1,4 +1,4 @@
-﻿#pragma target 4.5
+﻿#pragma require compute
 /* ^^ note: seems to have no effect.  Must be written down directly at the top level? */
 
 

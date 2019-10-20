@@ -13,7 +13,7 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-            #pragma target 5.0
+            #pragma require compute
             #include "Assets/ShaderDebugger/debugger.cginc"
 
 			struct appdata
