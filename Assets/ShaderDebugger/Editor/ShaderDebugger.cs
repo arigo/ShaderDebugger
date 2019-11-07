@@ -121,13 +121,21 @@ namespace ShaderDebugger
         {
             OnDisable();
             Camera.onPreRender += PreRenderCallback;
+#if UNITY_2019_1_OR_NEWER
+            SceneView.duringSceneGui += SceneGUICallback;
+#else
             SceneView.onSceneGUIDelegate += SceneGUICallback;
+#endif
         }
 
         void OnDisable()
         {
             Camera.onPreRender -= PreRenderCallback;
+#if UNITY_2019_1_OR_NEWER
+            SceneView.duringSceneGui -= SceneGUICallback;
+#else
             SceneView.onSceneGUIDelegate -= SceneGUICallback;
+#endif
             CloseBuffer();
         }
 
