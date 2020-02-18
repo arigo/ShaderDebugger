@@ -191,12 +191,14 @@ namespace ShaderDebugger
         const uint _DEBUG_CUBE = 18;
         const uint _DEBUG_SCREEN_DISC = 19;
 
+#pragma warning disable 649
         struct DebugStruct
         {
             public uint next;
             public uint kind;
             public Vector4 v;
         }
+#pragma warning restore 649
 
         float most_recent_load;
         int most_recent_count;
