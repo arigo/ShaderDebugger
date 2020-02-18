@@ -400,7 +400,9 @@ namespace ShaderDebugger
         {
             if (textlines.Count > 0)
             {
-                Handles.Label(pt, string.Join("\n", textlines.ToArray()));
+                GUIStyle style = new GUIStyle();
+                style.normal.textColor = Color.black;
+                Handles.Label(pt, string.Join("\n", textlines.ToArray()), style);
                 textlines.Clear();
             }
         }
