@@ -11,9 +11,9 @@
 		Pass
 		{
 			CGPROGRAM
-			#pragma vertex vert
+            #pragma vertex vert
 			#pragma fragment frag
-            #pragma require compute
+            #pragma target 4.5
             #include "Assets/ShaderDebugger/debugger.cginc"
 
 			struct appdata

@@ -15,7 +15,7 @@ numerical value.  This is done by writing the following code in the pixel shader
 example comes from the ``Demo`` directory):
 
 ```c
-#pragma require compute
+#pragma target 4.5            /* or also "#pragma require compute", from Unity 2019 */
 #include "Assets/ShaderDebugger/debugger.cginc"    /* could also be a relative path */
 
 ...

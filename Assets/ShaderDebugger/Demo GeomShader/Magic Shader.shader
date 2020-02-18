@@ -15,11 +15,10 @@
         Pass
         {
             CGPROGRAM
+            #pragma target 4.5
             #pragma vertex vert
             #pragma geometry geom
             #pragma fragment frag
-            #pragma require compute
-            #pragma require geometry
             #include "Assets/ShaderDebugger/debugger.cginc"
 
             struct incoming

@@ -18,7 +18,7 @@
             CGPROGRAM
             #pragma vertex vert_img
             #pragma fragment frag
-            #pragma require compute
+            #pragma target 4.5
             #include "Assets/ShaderDebugger/debugger.cginc"
  
             #include "UnityCG.cginc"

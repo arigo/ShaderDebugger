@@ -1,5 +1,4 @@
-﻿#pragma require compute
-/* ^^ note: seems to have no effect.  Must be written down directly at the top level? */
+﻿/* note: remember to add "#pragma target 4.5"! */
 
 
 #define _DEBUG_ROOT           1
