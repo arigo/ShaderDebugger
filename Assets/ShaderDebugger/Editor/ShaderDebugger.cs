@@ -162,7 +162,11 @@ namespace ShaderDebugger
 
             Graphics.ClearRandomWriteTargets();
             Graphics.SetRandomWriteTarget(7, buffer, false);
-            buffer.SetCounterValue(0);
+            /* buffer.SetCounterValue(0);
+             * XXX XXX XXX I don't understand why or how, but we get the right effect if we
+             * don't reset the counter value to zero here.  Otherwise, at least in Unity 2019.3.1f1
+             * the buffer stays empty if there are no shadows.  WAT IS GOING ON
+             */
             buffer_length_cache = 0;
 
             buf_projmat = cam.projectionMatrix;
