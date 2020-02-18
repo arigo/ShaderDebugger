@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -68,7 +68,7 @@ namespace ShaderDebugger
 
                 if (rec_entries == 0)
                 {
-                    EditorGUILayout.HelpBox("No shader including 'debugging.cginc' found, or object is not drawn." +
+                    EditorGUILayout.HelpBox("Toggle Light in the Scene  \n or \n No shader including 'debugger.cginc' found, \n or \n object is not drawn." +
                         "\n\nTo debug a shader, you must first call DebugFragment() inside the fragment shader " +
                         "or e.g. DebugVertexO4() in the vertex shader, and then call the " +
                         "DbgXxx() functions to record what you are interested in seeing.", MessageType.Warning);
