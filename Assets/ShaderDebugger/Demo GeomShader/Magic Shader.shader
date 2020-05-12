@@ -15,7 +15,7 @@
         Pass
         {
             CGPROGRAM
-            #pragma target 4.5
+            #pragma target 5.0
             #pragma vertex vert
             #pragma geometry geom
             #pragma fragment frag
