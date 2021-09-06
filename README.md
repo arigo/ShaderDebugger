@@ -47,11 +47,17 @@ The main difference is that you need to call ``DebugVertexO4()`` and not ``Debug
 NEW (sept. 2019): it also works with post-processing or image effect shaders.  See the demos
 in the directories "Demo" and "Demo PostProcessing".
 
+NEW (sept. 2021): it also works with standard shaders.  See the demo in the directory
+"Demo Standard".
+
 
 ## Details
 
 In general, we must call ``uint root = DebugFragment(i.vertex);`` once in a fragment or
-post-processing shader, or ``uint root = DebugVertexO4(i.vertex);`` once in a vertex shader.
+post-processing shader, or ``uint root = DebugVertexO4(i.vertex);`` once in a vertex shader,
+or ``uint root = DebugWorldPos(IN.worldPos);`` once in a standard surface shader (you need
+to add ``float3 worldPos;`` in the ``struct Input``).
+
 Then we can call any number of
 ``DbgXxx()`` functions by passing the ``root`` value as first argument.  The whole list
 of supported functions is in ``debugger.cginc``.  (If you need to add more, you need to edit
