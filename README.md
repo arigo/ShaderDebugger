@@ -1,5 +1,6 @@
 # ShaderDebugger
-Simple Unity framework to debug shader code.  Supports vertex, fragment and postprocessing shaders.  Here's an example:
+Simple Unity framework to debug shader code.  Supports vertex, fragment, standard, and postprocessing shaders.
+Here's an example:
 
 ![sshot1](Screenshots/sshot1.png?raw=true "sshot1")
 
@@ -42,7 +43,7 @@ fixed4 frag (v2f i) : SV_Target
 Note that this only works in the Scene view, not in the Game view (nor in builds).
 
 NEW (sept. 2021): it also works with standard shaders.  See the demo in the directory
-"Demo Standard".
+"Demo Standard".  You need to call ``DebugWorldPos()`` instead of ``DebugFragment()``.
 
 NEW (oct. 2019): it also supports vertex shaders.  See the demo in the directory "Demo Vertex".
 The main difference is that you need to call ``DebugVertexO4()`` and not ``DebugFragment()``.
@@ -53,12 +54,27 @@ in the directories "Demo" and "Demo PostProcessing".
 
 ## Details
 
-In general, we must call ``uint root = DebugFragment(i.vertex);`` once in a fragment or
-post-processing shader, or ``uint root = DebugVertexO4(i.vertex);`` once in a vertex shader,
-or ``uint root = DebugWorldPos(IN.worldPos);`` once in a standard surface shader (you need
-to add ``float3 worldPos;`` in the ``struct Input``).
+In general, you must call the initialization function once in the shader pass you want to debug.
+This means:
 
-Then we can call any number of
+* for vertex shaders: ``uint root = DebugVertexO4(i.vertex);``.  The argument is the
+  field marked as ``POSITION`` in the input structure.  Alternatively, you can use
+  ``uint root = DebugVertexW4(float4);`` or `uint root = DebugWorldPos(float3);`` if
+  you have a world position and not really an object position.
+
+* for fragment shaders: ``uint root = DebugFragment(i.vertex);``.  The argument is the
+  field marked as ``SV_POSITION`` in the input structure.  As above, you can sometimes
+  use ``DebugVertexW4(float4)`` or ``DebugWorldPos(float3)`` if it is easier to get the
+  world position.
+
+* for post-processing shaders: same as for fragment shaders, use
+  ``DebugFragment(SV_POSITION);``.
+
+* for standard surface shaders: ``uint root = DebugWorldPos(IN.worldPos);``.  The argument
+  is the field ``float3 worldPos;`` from the ``struct Input`` declared in your custom
+  standard shader.  Make sure this field is declared there.
+
+Then you can call any number of
 ``DbgXxx()`` functions by passing the ``root`` value as first argument.  The whole list
 of supported functions is in ``debugger.cginc``.  (If you need to add more, you need to edit
 that place as well as ``DisplayHandle()`` in ``ShaderDebugger.cs``.  Please issue pull requests
@@ -74,10 +90,11 @@ writes one float numerically on screen, at the position that was just changed in
 You should remember to remove or comment out all the code from the shader---including the
 ``#include "debugger.cginc"``--- when you are done.
 
-If the shader is more complicated, just make sure you call ``DebugFrament()`` once, typically at
-the start of the fragement function, and then pass around the ``root`` variable to all places where
-you need ``DbgXxx()``.  Feel free to add conditions, like ``if (x < 0) DbgSetColor(root, float4(1,0,0,1));``
-to make the next thing red if ``x < 0``.  You're writing a shader, but in this case you don't have
-to worry about performance :-)
+If the shader is more complicated, just make sure you call ``uint root = DebugFragment/Vertex/WorldPos()``
+once, typically at
+the start of the shader function, and then pass around the ``root`` variable to all places where
+you need to call the other ``DbgXxx()`` functions.  Feel free to add conditions, like
+``if (x < 0) DbgSetColor(root, float4(1,0,0,1));`` to make the next thing red if ``x < 0``.
+You're writing a shader, but in this case you don't have to worry about performance :-)
 
 Have fun!
