@@ -25,6 +25,7 @@ struct _DebugStruct
     float4 v;
 };
 
+#ifdef SHADER_API_D3D11
 RWStructuredBuffer<_DebugStruct> _internal_debug_buffer : register(u7);
 
 void _DbgEmit(uint root, uint kind, float4 v)
@@ -50,8 +51,15 @@ uint _DbgEmitStart(float4 v)
     _internal_debug_buffer[root] = s;
     return root;
 }
+#else
+/* unsupported! but mess: surface shaders see this and if values are unused here
+   they will just drop them.  Hacks are needed to make the value appear used. */
+void _DbgEmit(uint root, uint kind, float4 v) { clip(frac(v.x + v.y + v.z + v.w) - 0.5); }
+uint _DbgEmitStart(float4 v) { clip(frac(v.x+v.y+v.z+v.w)-0.5); return 0; }
+#endif
 
 
+uint DebugWorldPos(float3 world_position) { return _DbgEmitStart(float4(world_position, 0)); }
 uint DebugVertexW4(float4 world_position) { return _DbgEmitStart(float4(world_position.xyz / world_position.w, 0)); }
 uint DebugVertexO4(float4 obj_position) { return DebugVertexW4(mul(unity_ObjectToWorld, obj_position)); }
 uint DebugFragment(float4 sv_position) { return _DbgEmitStart(sv_position); }
