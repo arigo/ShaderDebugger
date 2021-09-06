@@ -41,14 +41,14 @@ fixed4 frag (v2f i) : SV_Target
 
 Note that this only works in the Scene view, not in the Game view (nor in builds).
 
+NEW (sept. 2021): it also works with standard shaders.  See the demo in the directory
+"Demo Standard".
+
 NEW (oct. 2019): it also supports vertex shaders.  See the demo in the directory "Demo Vertex".
 The main difference is that you need to call ``DebugVertexO4()`` and not ``DebugFragment()``.
 
 NEW (sept. 2019): it also works with post-processing or image effect shaders.  See the demos
 in the directories "Demo" and "Demo PostProcessing".
-
-NEW (sept. 2021): it also works with standard shaders.  See the demo in the directory
-"Demo Standard".
 
 
 ## Details
