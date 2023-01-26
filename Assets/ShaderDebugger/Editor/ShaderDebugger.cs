@@ -123,6 +123,10 @@ namespace ShaderDebugger
             Camera.onPreRender += PreRenderCallback;
 #if UNITY_2019_1_OR_NEWER
             SceneView.duringSceneGui += SceneGUICallback;
+            if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset != null)
+            {
+                UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += (_, camera) => PreRenderCallback(camera);
+            }
 #else
             SceneView.onSceneGUIDelegate += SceneGUICallback;
 #endif
