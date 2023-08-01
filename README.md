@@ -2,6 +2,8 @@
 Simple Unity framework to debug shader code.  Supports vertex, fragment, standard, and postprocessing shaders.
 
 Supported versions should be between 2017.x to 2021.3, but it probably works on more recent versions too.
+Tested mainly with the built-in rendering pipeline, but might now work with the scriptable rendering pipeline as well.
+This works by displaying extra information in the scene view (not in the game view nor inside VR headsets).
 
 Here's an example:
 
