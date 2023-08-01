@@ -117,6 +117,13 @@ namespace ShaderDebugger
             }
         }
 
+#if UNITY_2019_1_OR_NEWER
+        void PreRenderCallback1(UnityEngine.Rendering.ScriptableRenderContext ctx, Camera camera)
+        {
+            PreRenderCallback(camera);
+        }
+#endif
+
         void OnEnable()
         {
             OnDisable();
@@ -124,9 +131,7 @@ namespace ShaderDebugger
 #if UNITY_2019_1_OR_NEWER
             SceneView.duringSceneGui += SceneGUICallback;
             if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset != null)
-            {
-                UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += (_, camera) => PreRenderCallback(camera);
-            }
+                UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += PreRenderCallback1;
 #else
             SceneView.onSceneGUIDelegate += SceneGUICallback;
 #endif
@@ -137,6 +142,8 @@ namespace ShaderDebugger
             Camera.onPreRender -= PreRenderCallback;
 #if UNITY_2019_1_OR_NEWER
             SceneView.duringSceneGui -= SceneGUICallback;
+            if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset != null)
+                UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= PreRenderCallback1;
 #else
             SceneView.onSceneGUIDelegate -= SceneGUICallback;
 #endif
