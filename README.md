@@ -66,7 +66,7 @@ This means:
 
 * for vertex shaders: ``uint root = DebugVertexO4(i.vertex);``.  The argument is the
   field marked as ``POSITION`` in the input structure.  Alternatively, you can use
-  ``uint root = DebugVertexW4(float4);`` or `uint root = DebugWorldPos(float3);`` if
+  ``uint root = DebugVertexW4(float4);`` or ``uint root = DebugWorldPos(float3);`` if
   you have a world position and not really an object position.
 
 * for fragment shaders: ``uint root = DebugFragment(i.vertex);``.  The argument is the
@@ -75,7 +75,7 @@ This means:
   world position.
 
 * for post-processing shaders: same as for fragment shaders, use
-  ``DebugFragment(SV_POSITION);``.
+  ``DebugFragment(i.position);`` with the field marked as ``SV_POSITION``.
 
 * for standard surface shaders: ``uint root = DebugWorldPos(IN.worldPos);``.  The argument
   is the field ``float3 worldPos;`` from the ``struct Input`` declared in your custom
@@ -98,9 +98,10 @@ You should remember to remove or comment out all the code from the shader---incl
 ``#include "debugger.cginc"``--- when you are done.
 
 If the shader is more complicated, just make sure you call ``uint root = DebugFragment/Vertex/WorldPos()``
-once, typically at
-the start of the shader function, and then pass around the ``root`` variable to all places where
-you need to call the other ``DbgXxx()`` functions.  Feel free to add conditions, like
+once, typically at the start of the shader function, and then pass around the ``root`` variable to all
+places where you need to call the other ``DbgXxx()`` functions.  Or more simply, declare a global
+variable ``uint root;``, assign it at the start of the shader function, and read it from anywhere
+to call the ``DbgXxx()`` functions.  Feel free to add branches, like
 ``if (x < 0) DbgSetColor(root, float4(1,0,0,1));`` to make the next thing red if ``x < 0``.
 You're writing a shader, but in this case you don't have to worry about performance :-)
 
