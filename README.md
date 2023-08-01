@@ -1,5 +1,8 @@
 # ShaderDebugger
 Simple Unity framework to debug shader code.  Supports vertex, fragment, standard, and postprocessing shaders.
+
+Supported versions should be between 2017.x to 2021.3, but it probably works on more recent versions too.
+
 Here's an example:
 
 ![sshot1](Screenshots/sshot1.png?raw=true "sshot1")
@@ -41,6 +44,8 @@ fixed4 frag (v2f i) : SV_Target
 ```
 
 Note that this only works in the Scene view, not in the Game view (nor in builds).
+
+NEW (july 2023): fix for the Unity SRP by Aki (with small untested changes).  Thanks!
 
 NEW (sept. 2021): it also works with standard shaders.  See the demo in the directory
 "Demo Standard".  You need to call ``DebugWorldPos()`` instead of ``DebugFragment()``.
